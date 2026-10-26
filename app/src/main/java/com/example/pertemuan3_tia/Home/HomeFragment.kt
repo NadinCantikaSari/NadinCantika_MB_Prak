@@ -1,3 +1,4 @@
+
 package com.example.pertemuan3_tia.Home
 
 import android.content.Context
@@ -13,17 +14,20 @@ import androidx.fragment.app.Fragment
 import com.example.pertemuan3_tia.DetailActivity
 import com.example.pertemuan3_tia.Home.Pertemuan6.EnamActivity
 import com.example.pertemuan3_tia.Home.pertemuan5.LimaActivity
+import com.example.pertemuan3_tia.Home.pertemuan9.NinthActivity
 import com.example.pertemuan3_tia.LoginActivity
 import com.example.pertemuan3_tia.databinding.FragmentHomeBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 
 class HomeFragment : Fragment() {
+
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
@@ -34,25 +38,40 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Toolbar
-        (requireActivity() as AppCompatActivity).setSupportActionBar(binding.toolbar)
-        (requireActivity() as AppCompatActivity).supportActionBar?.title = "Home"
+        (requireActivity() as AppCompatActivity)
+            .setSupportActionBar(binding.toolbar)
 
-        // Latihan 5.1: sapaan pengguna dari SharedPreferences
-        val sharedPref = requireContext().getSharedPreferences("user_pref", Context.MODE_PRIVATE)
+        (requireActivity() as AppCompatActivity)
+            .supportActionBar?.title = "Home"
+
+        // Sapaan pengguna dari SharedPreferences
+        val sharedPref = requireContext()
+            .getSharedPreferences("user_pref", Context.MODE_PRIVATE)
+
         val username = sharedPref.getString("username", "Pengguna")
         binding.tvWelcome.text = "Halo, $username"
         binding.textView.text = username
         binding.textView2.text = "••••••••"
 
+        // Tombol Snackbar
         binding.SnackBar.setOnClickListener {
-            Snackbar.make(binding.root, "Halo ini snackbar", Snackbar.LENGTH_LONG)
-                .setAction("KEMBALI") {
-                    Toast.makeText(requireContext(), "Kembali ke halaman Activity", Toast.LENGTH_LONG).show()
-                }
-                .show()
+            Snackbar.make(
+                binding.root,
+                "Halo ini snackbar",
+                Snackbar.LENGTH_LONG
+            ).setAction("KEMBALI") {
+                Toast.makeText(
+                    requireContext(),
+                    "Kembali ke halaman Activity",
+                    Toast.LENGTH_LONG
+                ).show()
+            }.show()
         }
+
+        // Tombol Alert Dialog
         binding.Alert.setOnClickListener {
-            MaterialAlertDialogBuilder(requireContext()).setTitle("Hapus data")
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Hapus data")
                 .setMessage("Data yang dihapus tidak bisa dikembalikan.")
                 .setNegativeButton("Batal", null)
                 .setPositiveButton("Hapus") { dialog, _ ->
@@ -61,17 +80,36 @@ class HomeFragment : Fragment() {
                 .setCancelable(false)
                 .show()
         }
+
+        // Tombol Detail
         binding.btnDetail.setOnClickListener {
-            startActivity(Intent(requireContext(), DetailActivity::class.java))
-        }
-        binding.btnToLima.setOnClickListener {
-            startActivity(Intent(requireContext(), LimaActivity::class.java))
-        }
-        binding.btnToEnam.setOnClickListener {
-            startActivity(Intent(requireContext(), EnamActivity::class.java))
+            startActivity(
+                Intent(requireContext(), DetailActivity::class.java)
+            )
         }
 
-        // Logout: hapus data login, kembali ke LoginActivity, bersihkan seluruh back stack
+        // Tombol Pertemuan 5
+        binding.btnToLima.setOnClickListener {
+            startActivity(
+                Intent(requireContext(), LimaActivity::class.java)
+            )
+        }
+
+        // Tombol Pertemuan 6
+        binding.btnToEnam.setOnClickListener {
+            startActivity(
+                Intent(requireContext(), EnamActivity::class.java)
+            )
+        }
+
+        // Tombol Pertemuan 9
+        binding.btnToNinth.setOnClickListener {
+            startActivity(
+                Intent(requireContext(), NinthActivity::class.java)
+            )
+        }
+
+        // Logout
         binding.btnLogout.setOnClickListener {
             AlertDialog.Builder(requireContext())
                 .setTitle("Logout")
@@ -79,11 +117,21 @@ class HomeFragment : Fragment() {
                 .setPositiveButton("Ya") { dialog, _ ->
                     sharedPref.edit().clear().apply()
                     dialog.dismiss()
-                    val intent = Intent(requireContext(), LoginActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+
+                    val intent = Intent(
+                        requireContext(),
+                        LoginActivity::class.java
+                    )
+
+                    intent.flags =
+                        Intent.FLAG_ACTIVITY_NEW_TASK or
+                                Intent.FLAG_ACTIVITY_CLEAR_TASK
+
                     startActivity(intent)
                 }
-                .setNegativeButton("Batal") { dialog, _ -> dialog.dismiss() }
+                .setNegativeButton("Batal") { dialog, _ ->
+                    dialog.dismiss()
+                }
                 .show()
         }
     }
